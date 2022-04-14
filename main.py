@@ -3,6 +3,7 @@ from time import sleep
 from dotenv import load_dotenv
 import os
 import json
+import pickle
 load_dotenv()
 
 class MandiriLivin(DriverChrome):
@@ -134,6 +135,10 @@ class MandiriLivin(DriverChrome):
                     break
                 except:
                     pass
+
+            # getCookies
+            for cookie in self.driver.get_cookies():
+                print(cookie["name"], '=', cookie["value"])
 
     def get_credit(self):
         pass
