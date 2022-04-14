@@ -32,7 +32,7 @@ class Mandiri(DriverChrome):
             cookie_dict.append(pair_cookies)
 
         self.cookies_ = (";".join(cookie_dict))
-        print(self.cookies_)
+        # print(self.cookies_)
 
     def get_balance(self):
         balance = Livin(self.cookies_)
@@ -81,9 +81,15 @@ if __name__ == '__main__':
     # auth *
     app.login(username="shodiq0604", password="Muzaki334") # Login|selenium
     app.getcookies() # Create|Cookies
+
+    input('Get balance')
     # get balance
     bal = app.get_balance()
     print(bal)
+    input('Get Mutasi')
+    # get mutasi
+    mut = app.mutasi("1350015688359", "1648746000000", "1649869200000", "D", "")
+    print(type(mut))
 
     input('Logout.')
     app.logout_request()

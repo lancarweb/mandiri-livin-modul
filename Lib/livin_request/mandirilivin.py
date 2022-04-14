@@ -59,7 +59,7 @@ class Livin:
         # GET|MUTASI
         response_mutasi = self.ses.request("GET", self.url_mutasi, data=self.payload, headers=self.headers, params=querystring)
 
-        return (response_mutasi.text)
+        return (json.loads(response_mutasi.text))
 
     def livin_logout(self):
         self.ses.request("GET", self.url_logout, data=self.payload, headers=self.headers)
