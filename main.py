@@ -2,6 +2,7 @@ from driver.driver import DriverChrome
 from time import sleep
 from dotenv import load_dotenv
 import os
+import json
 load_dotenv()
 
 class MandiriLivin(DriverChrome):
@@ -29,7 +30,9 @@ class MandiriLivin(DriverChrome):
             except:
                 pass
 
-    def get_debit(self):
+    def get_debit(self, **kwargs):
+        print(kwargs)
+
         # select Account|debit|by|rekening
         while True:
             sleep(1)
@@ -46,13 +49,13 @@ class MandiriLivin(DriverChrome):
                 self.driver.find_element(self.By.XPATH, '//input[@id="fromDate"]').click()
                 select = self.Select(self.driver.find_element(self.By.XPATH, '//select[@class="ui-datepicker-month"]'))
                 sleep(0.5)
-                select.select_by_visible_text("Apr")
+                select.select_by_visible_text("{}".format(kwargs["from_date"]["month"]))
                 select = self.Select(self.driver.find_element(self.By.XPATH, '//select[@class="ui-datepicker-year"]'))
                 sleep(0.5)
-                select.select_by_visible_text("2022")
+                select.select_by_visible_text("{}".format(kwargs["from_date"]["year"]))
                 tabel_cal = self.driver.find_element(self.By.XPATH, '//table[@class="ui-datepicker-calendar"]')
                 sleep(0.5)
-                tabel_cal.find_element(self.By.XPATH, '//*[text()="1"]').click()
+                tabel_cal.find_element(self.By.XPATH, '//*[text()="{}"]'.format(kwargs["from_date"]["day"])).click()
 
                 break
             except:
@@ -65,13 +68,13 @@ class MandiriLivin(DriverChrome):
                 self.driver.find_element(self.By.XPATH, '//input[@id="toDate"]').click()
                 select = self.Select(self.driver.find_element(self.By.XPATH, '//select[@class="ui-datepicker-month"]'))
                 sleep(0.5)
-                select.select_by_visible_text("Apr")
+                select.select_by_visible_text("{}".format(kwargs["to_date"]["month"]))
                 select = self.Select(self.driver.find_element(self.By.XPATH, '//select[@class="ui-datepicker-year"]'))
                 sleep(0.5)
-                select.select_by_visible_text("2022")
+                select.select_by_visible_text("{}".format(kwargs["to_date"]["year"]))
                 tabel_cal = self.driver.find_element(self.By.XPATH, '//table[@class="ui-datepicker-calendar"]')
                 sleep(0.5)
-                tabel_cal.find_element(self.By.XPATH, '//*[text()="14"]').click()
+                tabel_cal.find_element(self.By.XPATH, '//*[text()="{}"]'.format(kwargs["to_date"]["day"])).click()
 
                 break
             except:
@@ -87,7 +90,7 @@ class MandiriLivin(DriverChrome):
                 pass
         
         # type
-        type_transaction = 'Kredit'
+        type_transaction = kwargs["type"]
         if 'Kredit' == type_transaction:
             self.driver.find_element(self.By.XPATH, '//li[@class="select2-results-dept-0 select2-result select2-result-selectable"]').click()
         elif 'Debit' == type_transaction:
@@ -161,7 +164,7 @@ class MandiriLivin(DriverChrome):
 if __name__ == '__main__':
     mandiri = MandiriLivin(username='shodiq0604', password='Muzaki334', account=1350015688359)
     mandiri.login()
-    mandiri.get_debit()
+    mandiri.get_debit(type="Kredit", from_date={"month": "Apr", "year": 2022, "day": 1}, to_date={"month": "Apr", "year": 2022, "day": 10})
     input("click - Logout!")
     mandiri.logout()
     mandiri.driver_quit()
