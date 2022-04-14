@@ -30,6 +30,7 @@ class MandiriLivin(DriverChrome):
                 pass
 
     def get_debit(self):
+        # select Account|debit|by|rekening
         while True:
             sleep(1)
             try:
@@ -37,7 +38,49 @@ class MandiriLivin(DriverChrome):
                 break
             except:
                 pass
-        
+
+        # filter|debit|from
+        while True:
+            sleep(1)
+            try:
+                self.driver.find_element(self.By.XPATH, '//input[@id="fromDate"]').click()
+                select = self.Select(self.driver.find_element(self.By.XPATH, '//select[@class="ui-datepicker-month"]'))
+                sleep(0.5)
+                select.select_by_visible_text("Sep")
+                select = self.Select(self.driver.find_element(self.By.XPATH, '//select[@class="ui-datepicker-year"]'))
+                sleep(0.5)
+                select.select_by_visible_text("2019")
+                tabel_cal = self.driver.find_element(self.By.XPATH, '//table[@class="ui-datepicker-calendar"]')
+                sleep(0.5)
+                tabel_cal.find_element(self.By.XPATH, '//*[text()="30"]').click()
+
+                break
+            except:
+                pass
+
+        # filter|debit|to
+        while True:
+            sleep(1)
+            try:
+                self.driver.find_element(self.By.XPATH, '//input[@id="toDate"]').click()
+                select = self.Select(self.driver.find_element(self.By.XPATH, '//select[@class="ui-datepicker-month"]'))
+                sleep(0.5)
+                select.select_by_visible_text("Sep")
+                select = self.Select(self.driver.find_element(self.By.XPATH, '//select[@class="ui-datepicker-year"]'))
+                sleep(0.5)
+                select.select_by_visible_text("2019")
+                tabel_cal = self.driver.find_element(self.By.XPATH, '//table[@class="ui-datepicker-calendar"]')
+                sleep(0.5)
+                tabel_cal.find_element(self.By.XPATH, '//*[text()="30"]').click()
+
+                break
+            except:
+                pass
+
+        # search|filter|debit
+        sleep(0.5)
+        self.driver.find_element(self.By.XPATH, '//a[@id="btnSearch"]').click()
+
         # parse|data|debit
         while True:
             sleep(1)
