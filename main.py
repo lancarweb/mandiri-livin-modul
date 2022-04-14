@@ -33,7 +33,21 @@ class MandiriLivin(DriverChrome):
         while True:
             sleep(1)
             try:
-                self.driver.find_element(self.By.XPATH, '//*[text()="{}"]'.format(self.account)).click()
+                self.driver.find_element(self.By.XPATH, '//*[text()="{}"]'.format(self.account)).click() # click account | rek
+                break
+            except:
+                pass
+        
+        # parse|data|debit
+        while True:
+            sleep(1)
+            try:
+                tabel = self.driver.find_element(self.By.XPATH, '//table[@class="table dataTable table-striped"]').find_element(self.By.TAG_NAME, 'tbody')
+                tr = tabel.find_elements(self.By.TAG_NAME, 'tr')
+
+                for data in tr:
+                    print(data.text.split('\n'))
+
                 break
             except:
                 pass
