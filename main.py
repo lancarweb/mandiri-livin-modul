@@ -46,13 +46,13 @@ class MandiriLivin(DriverChrome):
                 self.driver.find_element(self.By.XPATH, '//input[@id="fromDate"]').click()
                 select = self.Select(self.driver.find_element(self.By.XPATH, '//select[@class="ui-datepicker-month"]'))
                 sleep(0.5)
-                select.select_by_visible_text("Sep")
+                select.select_by_visible_text("Apr")
                 select = self.Select(self.driver.find_element(self.By.XPATH, '//select[@class="ui-datepicker-year"]'))
                 sleep(0.5)
-                select.select_by_visible_text("2019")
+                select.select_by_visible_text("2022")
                 tabel_cal = self.driver.find_element(self.By.XPATH, '//table[@class="ui-datepicker-calendar"]')
                 sleep(0.5)
-                tabel_cal.find_element(self.By.XPATH, '//*[text()="30"]').click()
+                tabel_cal.find_element(self.By.XPATH, '//*[text()="1"]').click()
 
                 break
             except:
@@ -65,35 +65,72 @@ class MandiriLivin(DriverChrome):
                 self.driver.find_element(self.By.XPATH, '//input[@id="toDate"]').click()
                 select = self.Select(self.driver.find_element(self.By.XPATH, '//select[@class="ui-datepicker-month"]'))
                 sleep(0.5)
-                select.select_by_visible_text("Sep")
+                select.select_by_visible_text("Apr")
                 select = self.Select(self.driver.find_element(self.By.XPATH, '//select[@class="ui-datepicker-year"]'))
                 sleep(0.5)
-                select.select_by_visible_text("2019")
+                select.select_by_visible_text("2022")
                 tabel_cal = self.driver.find_element(self.By.XPATH, '//table[@class="ui-datepicker-calendar"]')
                 sleep(0.5)
-                tabel_cal.find_element(self.By.XPATH, '//*[text()="30"]').click()
+                tabel_cal.find_element(self.By.XPATH, '//*[text()="14"]').click()
 
                 break
             except:
                 pass
+
+        # TypeTransaction
+        while True:
+            sleep(0.5)
+            try:
+                self.driver.find_element(self.By.XPATH, '//*[@id="s2id_transactionTypes"]').click()
+                break
+            except:
+                pass
+        
+        # type
+        type_transaction = 'Kredit'
+        if 'Kredit' == type_transaction:
+            self.driver.find_element(self.By.XPATH, '//li[@class="select2-results-dept-0 select2-result select2-result-selectable"]').click()
+        elif 'Debit' == type_transaction:
+            self.driver.find_element(self.By.XPATH, '//li[@class="select2-results-dept-0 select2-result select2-result-selectable select2-highlighted"]').click()
 
         # search|filter|debit
         sleep(0.5)
         self.driver.find_element(self.By.XPATH, '//a[@id="btnSearch"]').click()
 
-        # parse|data|debit
+        # check 6 month|error
+        err = 1
         while True:
             sleep(1)
+            if 3 == err:
+                six_err = False
+                break
             try:
-                tabel = self.driver.find_element(self.By.XPATH, '//table[@class="table dataTable table-striped"]').find_element(self.By.TAG_NAME, 'tbody')
-                tr = tabel.find_elements(self.By.TAG_NAME, 'tr')
-
-                for data in tr:
-                    print(data.text.split('\n'))
-
+                six_err = self.driver.find_element(self.By.XPATH, '//*[@class="text-center alert-text ns-index ns-box ns-bar ns-effect-slidetop ns-type-error ns-show"]')
                 break
             except:
                 pass
+            
+            err+=1
+
+        if six_err:
+            print(six_err.text)
+
+        else:
+            print(six_err)
+
+            # parse|data|debit
+            while True:
+                sleep(1)
+                try:
+                    tabel = self.driver.find_element(self.By.XPATH, '//table[@class="table dataTable table-striped"]').find_element(self.By.TAG_NAME, 'tbody')
+                    tr = tabel.find_elements(self.By.TAG_NAME, 'tr')
+
+                    for data in tr:
+                        print(data.text.split('\n'))
+
+                    break
+                except:
+                    pass
 
     def get_credit(self):
         pass
