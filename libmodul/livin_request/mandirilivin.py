@@ -25,7 +25,7 @@ class Livin:
             "Sec-Fetch-Dest": "empty",
             "Sec-Fetch-Mode": "cors",
             "Sec-Fetch-Site": "same-origin",
-            "User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/100.0.4896.75 Safari/537.36",
+            "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/100.0.4896.75 Safari/537.36",
             "X-Requested-With": "XMLHttpRequest",
             "content-type": "multipart/form-data"
         }
@@ -36,29 +36,29 @@ class Livin:
     def livin_balance(self):
         # GET|BALANCE
         response_getbalance = self.ses.request("GET", self.url_balance, data=self.payload, headers=self.headers)
-        return (json.loads(response_getbalance.text))
+        try:
+            return (json.loads(response_getbalance.text))
+        except:
+            return {"err": "Internet Banking User Login"}
 
     def livin_mutasi(self, accountNo, fromDate, toDate, transactionType, keyWord):
         
         # GET|BALANCE
         response_getbalance = self.ses.request("GET", self.url_balance, data=self.payload, headers=self.headers)
-        accountBalance = (json.loads(response_getbalance.text)["accountBalance"])
 
-        # QueryString
-        # accountNo = '1350015688359'
-        availableBalance = 'IDR {}'.format(accountBalance)
-        # fromDate = '1648746000000'
-        # toDate = '1649869200000'
-        # transactionType = 'D' # D|C|optional
-        # keyWord = '' # keyword(str)|optional
+        try:
+            accountBalance = (json.loads(response_getbalance.text)["accountBalance"])
+            availableBalance = 'IDR {}'.format(accountBalance)
 
-        # var|query
-        querystring = {"":"","accountNo":f"{accountNo}","availableBalance":f"{availableBalance}","searchCasaBy":"PERIOD","fromDate":f"{fromDate}","toDate":f"{toDate}","transactionTypeCode":"S","transactionType":f"{transactionType}","keyWord":f"{keyWord}","_":"1649947221497"}
+            # var|query
+            querystring = {"":"","accountNo":f"{accountNo}","availableBalance":f"{availableBalance}","searchCasaBy":"PERIOD","fromDate":f"{fromDate}","toDate":f"{toDate}","transactionTypeCode":"S","transactionType":f"{transactionType}","keyWord":f"{keyWord}","_":"1649947221497"}
 
-        # GET|MUTASI
-        response_mutasi = self.ses.request("GET", self.url_mutasi, data=self.payload, headers=self.headers, params=querystring)
+            # GET|MUTASI
+            response_mutasi = self.ses.request("GET", self.url_mutasi, data=self.payload, headers=self.headers, params=querystring)
 
-        return (json.loads(response_mutasi.text))
+            return (json.loads(response_mutasi.text))
+        except:
+            return {"err": "Internet Banking User Login"}
 
     def livin_logout(self):
         self.ses.request("GET", self.url_logout, data=self.payload, headers=self.headers)

@@ -1,3 +1,4 @@
+from http import cookies
 from .driver.driver import DriverChrome
 from time import sleep
 import os
@@ -7,11 +8,15 @@ from .livin_request.mandirilivin import Livin
 import time
 import datetime
 
-class Mandiri(DriverChrome):
+cookies_ = []
+
+class MandiriAuth(DriverChrome):
     def __init__(self):
         super().__init__()
 
     def login(self, **kwargs):
+        DriverChrome.__init__(self)
+
         self.driver.get(os.environ["BASE_URL"])
 
         while True:
@@ -28,16 +33,40 @@ class Mandiri(DriverChrome):
                 pass
 
     def getcookies(self):
-        cookie_dict = []
-        for cookie in self.driver.get_cookies():
-            pair_cookies = ("{}={}".format(cookie["name"], cookie["value"]))
-            cookie_dict.append(pair_cookies)
+        err_count = 1
+        while True:
+            sleep(1)
+            if 5 == err_count:
+                break
+            try:
+                errsession = self.driver.find_element(self.By.XPATH, '//*[@class="text-center alert-text ns-index ns-box ns-bar ns-effect-slidetop ns-type-error ns-show"]').text
+                break
+            except:
+                errsession = ''
 
-        self.cookies_ = (";".join(cookie_dict))
-        # print(self.cookies_)
+            err_count += 1
 
+        if errsession == '':
+            cookie_dict = []
+            for cookie in self.driver.get_cookies():
+                pair_cookies = ("{}={}".format(cookie["name"], cookie["value"]))
+                cookie_dict.append(pair_cookies)
+
+            global cookies_
+            cookies_ = (";".join(cookie_dict))
+
+        else:
+            print(f"{errsession}")
+
+    def driver_quit(self):
+        self.driver.quit()
+
+class MandiriLivin:
+    def __init__(self):
+        print(cookies_)
+    
     def get_balance(self):
-        balance = Livin(self.cookies_)
+        balance = Livin(cookies_)
         return balance.livin_balance()
 
     def mutasi(self, accountNo, fromDate, toDate, transactionType, keyWord):
@@ -50,63 +79,29 @@ class Mandiri(DriverChrome):
         toDate = (str(toDate).split('.')[0]+'000')
         
         # mutasi
-        mutasi = Livin(self.cookies_)
-        
-        # # data params
-        # accountNo = ""
-        # fromDate = ""
-        # toDate = ""
-        # transactionType = ""
-        # keyWord = ""
+        mutasi = Livin(cookies_)
         
         return mutasi.livin_mutasi(accountNo, fromDate, toDate, transactionType, keyWord)
 
     def logout_request(self):
-        logout = Livin(self.cookies_)
+        logout = Livin(cookies_)
         logout.livin_logout()
 
-    def logout(self):
-        while True:
-            sleep(1)
-            try:
-                self.driver.find_element(self.By.XPATH, '//i[@class="mdr-logout dropdown-menu-icon"]').click()
-                break
-            except:
-                pass
+    # def logout(self):
+    #     while True:
+    #         sleep(1)
+    #         try:
+    #             self.driver.find_element(self.By.XPATH, '//i[@class="mdr-logout dropdown-menu-icon"]').click()
+    #             break
+    #         except:
+    #             pass
 
-        while True:
-            sleep(1)
-            try:
-                self.driver.find_element(self.By.XPATH, '//*[@id="btnCancelReg"]').click()
-                break
-            except:
-                pass
+    #     while True:
+    #         sleep(1)
+    #         try:
+    #             self.driver.find_element(self.By.XPATH, '//*[@id="btnCancelReg"]').click()
+    #             break
+    #         except:
+    #             pass
 
-        self.driver.switch_to.default_content() # end-frame
-
-    def driver_quit(self):
-        self.driver.quit()
-
-# if __name__ == '__main__':
-#     app = Mandiri()
-#     # auth *
-#     app.login(username="shodiq0604", password="Muzaki334") # Login|selenium
-#     app.getcookies() # Create|Cookies
-
-#     # get balance
-#     input('Get balance')
-#     bal = app.get_balance()
-#     print(bal)
-    
-#     # get mutasi
-#     input('Get Mutasi')
-#     mut = app.mutasi("1350015688359", "1648746000000", "1649869200000", "D", "")
-#     print(mut)
-
-#     # Logout
-#     input('Logout.')
-#     app.logout_request()
-
-#     # Quit-Sel
-#     input('Quit-Sel')
-#     app.driver_quit()
+    #     self.driver.switch_to.default_content() # end-frame
