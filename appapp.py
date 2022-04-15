@@ -1,4 +1,4 @@
-from crypt import methods
+# from crypt import methods
 from flask import Flask, request, jsonify
 from libmodul.mandiri import MandiriAuth, MandiriLivin
 
