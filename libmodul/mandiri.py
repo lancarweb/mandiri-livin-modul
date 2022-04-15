@@ -4,6 +4,8 @@ import os
 from dotenv import load_dotenv
 load_dotenv()
 from .livin_request.mandirilivin import Livin
+import time
+import datetime
 
 class Mandiri(DriverChrome):
     def __init__(self):
@@ -39,6 +41,15 @@ class Mandiri(DriverChrome):
         return balance.livin_balance()
 
     def mutasi(self, accountNo, fromDate, toDate, transactionType, keyWord):
+
+        # timestamp converter
+        fromDate = time.mktime(datetime.datetime.strptime(fromDate, "%d/%m/%Y %H:%M:%S").timetuple())
+        toDate = time.mktime(datetime.datetime.strptime(toDate, "%d/%m/%Y %H:%M:%S").timetuple())
+
+        fromDate = (str(fromDate).split('.')[0]+'000')
+        toDate = (str(toDate).split('.')[0]+'000')
+        
+        # mutasi
         mutasi = Livin(self.cookies_)
         
         # # data params
