@@ -36,8 +36,7 @@ class Livin:
     def livin_balance(self):
         # GET|BALANCE
         response_getbalance = self.ses.request("GET", self.url_balance, data=self.payload, headers=self.headers)
-        accountBalance = (json.loads(response_getbalance.text)["accountBalance"])
-        return (accountBalance)
+        return (json.loads(response_getbalance.text))
 
     def livin_mutasi(self, accountNo, fromDate, toDate, transactionType, keyWord):
         

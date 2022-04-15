@@ -89,7 +89,7 @@ if __name__ == '__main__':
     input('Get Mutasi')
     # get mutasi
     mut = app.mutasi("1350015688359", "1648746000000", "1649869200000", "D", "")
-    print(type(mut))
+    print(mut)
 
     input('Logout.')
     app.logout_request()
