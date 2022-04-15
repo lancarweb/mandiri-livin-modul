@@ -1,9 +1,9 @@
-from driver.driver import DriverChrome
+from .driver.driver import DriverChrome
 from time import sleep
 import os
 from dotenv import load_dotenv
 load_dotenv()
-from livin_request.mandirilivin import Livin
+from .livin_request.mandirilivin import Livin
 
 class Mandiri(DriverChrome):
     def __init__(self):
@@ -76,22 +76,26 @@ class Mandiri(DriverChrome):
     def driver_quit(self):
         self.driver.quit()
 
-if __name__ == '__main__':
-    app = Mandiri()
-    # auth *
-    app.login(username="shodiq0604", password="Muzaki334") # Login|selenium
-    app.getcookies() # Create|Cookies
+# if __name__ == '__main__':
+#     app = Mandiri()
+#     # auth *
+#     app.login(username="shodiq0604", password="Muzaki334") # Login|selenium
+#     app.getcookies() # Create|Cookies
 
-    input('Get balance')
-    # get balance
-    bal = app.get_balance()
-    print(bal)
-    input('Get Mutasi')
-    # get mutasi
-    mut = app.mutasi("1350015688359", "1648746000000", "1649869200000", "D", "")
-    print(mut)
+#     # get balance
+#     input('Get balance')
+#     bal = app.get_balance()
+#     print(bal)
+    
+#     # get mutasi
+#     input('Get Mutasi')
+#     mut = app.mutasi("1350015688359", "1648746000000", "1649869200000", "D", "")
+#     print(mut)
 
-    input('Logout.')
-    app.logout_request()
-    input('Quit-Sel')
-    app.driver_quit()
+#     # Logout
+#     input('Logout.')
+#     app.logout_request()
+
+#     # Quit-Sel
+#     input('Quit-Sel')
+#     app.driver_quit()
