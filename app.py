@@ -58,6 +58,3 @@ def logout():
     mandiri.logout_request()
     
     return 'logout'
-
-if __name__ == '__main__':
-    app.run(debug=True)
