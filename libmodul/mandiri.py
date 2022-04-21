@@ -1,4 +1,4 @@
-from http import cookies
+# from http import cookies
 from .driver.driver import DriverChrome
 from time import sleep
 import os
@@ -15,9 +15,11 @@ class MandiriAuth(DriverChrome):
         super().__init__()
 
     def login(self, **kwargs):
-        DriverChrome.__init__(self)
+        # print(kwargs)
+        # DriverChrome.__init__(self)
 
-        self.driver.get(os.environ["BASE_URL"])
+        # self.driver.get(os.environ["BASE_URL"])
+        self.driver.get('https://ibank.bankmandiri.co.id/retail3/')
 
         while True:
             sleep(1)
@@ -63,7 +65,8 @@ class MandiriAuth(DriverChrome):
 
 class MandiriLivin:
     def __init__(self):
-        print(cookies_)
+        # print(cookies_)
+        self
     
     def get_balance(self):
         balance = Livin(cookies_)

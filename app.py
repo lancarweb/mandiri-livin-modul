@@ -14,6 +14,9 @@ def auth():
         username = request.form['username']
         password = request.form['password']
 
+        # print(username)
+        # print(password)
+
         # auth
         mandiri = MandiriAuth()
         mandiri.login(username=username, password=password)
