@@ -1,6 +1,6 @@
 # from crypt import methods
 from flask import Flask, request, jsonify
-from libmodul.mandiri import MandiriAuth, MandiriLivin
+from .libmodul.mandiri import MandiriAuth, MandiriLivin
 
 app = Flask(__name__)
 
@@ -22,12 +22,15 @@ def auth():
         mandiri.login(username=username, password=password)
         
         # create cookies
-        mandiri.getcookies()
+        cookie_status = mandiri.getcookies()
 
         # Quit|selenium
         mandiri.driver_quit()
 
-        return 'auth post sukses'
+        if cookie_status == None:
+            return {"status": True}
+        else:
+            return {"status":"{}".format(str(cookie_status))}
 
     else:
         return 'err. get login'

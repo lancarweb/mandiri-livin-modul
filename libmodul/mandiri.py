@@ -58,7 +58,7 @@ class MandiriAuth(DriverChrome):
             cookies_ = (";".join(cookie_dict))
 
         else:
-            print(f"{errsession}")
+            return (f"{errsession}")
 
     def driver_quit(self):
         self.driver.quit()
