@@ -1,4 +1,5 @@
 # from http import cookies
+from curses import curs_set
 from .driver.driver import DriverChrome
 from time import sleep
 import os
@@ -7,8 +8,7 @@ load_dotenv()
 from .livin_request.mandirilivin import Livin
 import time
 import datetime
-
-cookies_ = []
+import sqlite3
 
 class MandiriAuth(DriverChrome):
     def __init__(self):
@@ -54,8 +54,16 @@ class MandiriAuth(DriverChrome):
                 pair_cookies = ("{}={}".format(cookie["name"], cookie["value"]))
                 cookie_dict.append(pair_cookies)
 
-            global cookies_
+            # get cookies_
             cookies_ = (";".join(cookie_dict))
+            
+            # database
+            db = sqlite3.connect(os.getcwd()+"/dbcookies/dbcookies.db")
+            cursor = db.cursor()
+            query = "UPDATE cookies SET cookie = '{}' WHERE id=1".format(str(cookies_))
+            cursor.execute(query)
+            db.commit()
+            db.close()
 
         else:
             return (f"{errsession}")
@@ -69,7 +77,14 @@ class MandiriLivin:
         self
     
     def get_balance(self):
-        balance = Livin(cookies_)
+        db = sqlite3.connect(os.getcwd()+"/dbcookies/dbcookies.db")
+        cursor = db.cursor()
+        query = "SELECT * FROM cookies"
+        results = cursor.execute(query)
+        results = [result[1] for result in results]
+        db.close()
+
+        balance = Livin(results[0])
         return balance.livin_balance()
 
     def mutasi(self, accountNo, fromDate, toDate, transactionType, keyWord):
@@ -82,12 +97,26 @@ class MandiriLivin:
         toDate = (str(toDate).split('.')[0]+'000')
         
         # mutasi
-        mutasi = Livin(cookies_)
+        db = sqlite3.connect(os.getcwd()+"/dbcookies/dbcookies.db")
+        cursor = db.cursor()
+        query = "SELECT * FROM cookies"
+        results = cursor.execute(query)
+        results = [result[1] for result in results]
+        db.close()
+
+        mutasi = Livin(results[0])
         
         return mutasi.livin_mutasi(accountNo, fromDate, toDate, transactionType, keyWord)
 
     def logout_request(self):
-        logout = Livin(cookies_)
+        db = sqlite3.connect(os.getcwd()+"/dbcookies/dbcookies.db")
+        cursor = db.cursor()
+        query = "SELECT * FROM cookies"
+        results = cursor.execute(query)
+        results = [result[1] for result in results]
+        db.close()
+
+        logout = Livin(results[0])
         logout.livin_logout()
 
     # def logout(self):
